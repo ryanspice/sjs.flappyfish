@@ -1,0 +1,289 @@
+﻿<!DOCTYPE html>
+<html>
+
+<body>
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<!-- FlappyFish -->
+	<ins class="adsbygoogle"
+		style="position:absolute;bottom:0px;z-index:1115;display:inline-block;width:100%;height:5%;margin-left: auto ; margin-right: auto ;"
+		data-ad-client="ca-pub-7495914423888493" data-ad-slot="1709687763"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	<!-- FlappyFisher -->
+	<ins class="adsbygoogle"
+		style="position:absolute;top:0px;z-index:1115;display:inline-block;width:100%;height:6%;margin-left: auto ; margin-right: auto ;"
+		data-ad-client="ca-pub-7495914423888493" data-ad-slot="3186420966"></ins>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	<div id="fb-root"></div>
+	<script>
+		window.fbAsyncInit = function () {
+			FB.init({
+				appId: '748599215153304',
+				status: true,
+				xfbml: true
+			});
+		};
+
+		(function (d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) { return; }
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/en_US/all.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	</script>
+</body>
+<script rel="prefetch" type="application/x-javascript" src="game.js"></script>
+<script rel="prefetch" type="application/x-javascript" src="spice.js"></script>
+<script rel="prefetch" name="main" type="text/javascript" defer>
+
+	function createXMLHttp() {
+		//If XMLHttpRequest is available then using it
+		if (typeof XMLHttpRequest !== undefined) {
+			return new XMLHttpRequest;
+			//if window.ActiveXObject is available than the user is using IE...so we have to create the newest version XMLHttp object
+		} else if (window.ActiveXObject) {
+			var ieXMLHttpVersions = ['MSXML2.XMLHttp.5.0', 'MSXML2.XMLHttp.4.0', 'MSXML2.XMLHttp.3.0', 'MSXML2.XMLHttp', 'Microsoft.XMLHttp'],
+				xmlHttp;
+			//In this array we are starting from the first element (newest version) and trying to create it. If there is an
+			//exception thrown we are handling it (and doing nothing ^^)
+			for (var i = 0; i < ieXMLHttpVersions.length; i++) {
+				try {
+					xmlHttp = new ActiveXObject(ieXMLHttpVersions[i]);
+					return xmlHttp;
+				} catch (e) {
+				}
+			}
+		}
+	}
+	function getData() {
+		return false;
+		var xmlHttp = createXMLHttp();
+		xmlHttp.open('get', 'highscore.php', true);
+		xmlHttp.send(null);
+		xmlHttp.onreadystatechange = function () {
+			if (xmlHttp.readyState === 4) {
+				if (xmlHttp.status === 200) {
+					App.scores = {};
+					eval(xmlHttp.responseText);
+				} else {
+				}
+			} else {
+				//still processing
+			}
+		};
+	}
+	
+	//
+	
+	var init = function(){
+		window.rr = getData();
+			this.app.ext.top();
+			this.app.ext.debug.toggle("off");
+			this.visuals.background_set("#000000");
+			this.music = new this.app.client._Audio.MultiChannelSound("sound.ogg", 1);
+			//console.log(this.music);
+			//this.app.client._Audio.set(this.music);
+
+			if (!App.ext.useragent.ie) {
+				this.track0 = new App.client._Audio.MultiChannelSound("sound.ogg", 2);
+				this.track1 = new App.client._Audio.MultiChannelSound("cheepcheepbeach.ogg", 1);
+				setTimeout(function () {
+					//console.log(App.scores);
+					if (!music)
+						App.client.update.state.current.track1.play(), music = true;
+					//App.client._Audio.set(App.client.update.state.current.track1);
+				}, 1000)
+			}
+
+
+			this.c = [];
+			this.cx = [];
+			this.coff1 = 0;
+			this.coff2 = this.app.client.setWidth;
+			this.cloudSize = 5;
+			this.cc = 20 + Math.floor(this.app.client.setWidth / this.cloudSize);
+			this.viewX = 0;
+			this.cloudX = this.app.client.setWidth / 1.5;
+			this.cloudY = Math.random() * 100;
+			for (var i = this.cc; i >= 0; --i)
+				this.cx[i] = i * this.cloudSize;
+
+			this.WaterY = 0;
+			this.cloudSize = 15;
+			this.continue = false;
+			this.FishY = 1;
+			this.title = this.graphics.load("Title", "images/flappyfish");
+			this.box = this.graphics.load("box", "images/box");
+
+			this.flappyfishArray = [];
+			this.flappyfishArray[0] = this.graphics.load("F00", "images/FlappyFish0");
+			this.flappyfishArray[1] = this.graphics.load("F02", "images/FlappyFish1");
+			this.flappyfishArray[2] = this.graphics.load("F01", "images/FlappyFish2");
+
+			this.flappyfishArray[3] = this.graphics.load("B01", "images/FlappyFishB01");
+			this.flappyfishArray[4] = this.graphics.load("B02", "images/FlappyFishB02");
+			this.flappyfishArray[5] = this.graphics.load("B03", "images/FlappyFishB03");
+			this.flappyfishArray[6] = this.graphics.load("B04", "images/FlappyFishCC");
+
+			this.flappyfishArray[7] = this.graphics.load("U01", "images/Umbrella");
+			this.splash = 0;
+			this.SplashY = 0;
+
+
+			this.buttonfade = 1;
+			this.rate = false;
+			this.start = false;
+			this.score = false;
+	}
+
+	//
+	var music = false;
+	_Main.prototype = {
+		name: "Menu",
+		version: 0.2,
+		thresh: 160,
+		dist: 45,
+		SUN: false,
+		c: new Array,
+		c2: new Array,
+		init: init,
+		update: function () {
+
+			if (this.continue) {
+				if (this.SplashY > 50)
+					this.SplashY -= App.delta * 1;
+
+				if (this.WaterY < 0) {
+					this.WaterY += App.delta * 1;
+					return;
+				}
+				if (this.FishY < 300) {
+					if (this.FishY > 250) {
+						this.splash = true;
+						if (this.SplashY < 1)
+							this.SplashY = 100;
+
+					}
+
+
+					this.FishY += App.delta * this.FishY * 0.5;
+					if (this.FishY > 300)
+						this.FishY = 300;
+				}
+			}
+			for (var i = this.cc; i >= 0; --i)
+				if (-this.viewX + this.cx[i] < -this.cloudSize * 5)
+					this.cx[i] = this.viewX + this.app.client.setWidth + this.cloudSize * 5;
+			this.viewX += App.delta * 1;
+			if (this.cloudX > -140)
+				this.cloudX -= App.delta * 1;
+			else {
+				this.cloudX = this.app.client.setWidth + 140;
+				this.cloudY = Math.random() * 200;
+			}
+			//}
+			return true;
+		},
+		draw: function () {
+			this.visuals.rect_gradient(this.app.client.setWidth * 0.5, this.app.client.setHeight * 0.5, this.app.client.setWidth, this.app.client.setHeight,
+				1, 1, 1, "#4cc1ca", "#FFFFFF", 0);
+			//Clouds
+			for (var i = this.cc / 2; i >= 0; --i) {
+				this.visuals.circle(+i * 10, +Math.sin(i + i) * Math.sin(i + i / 2) * 15 + this.app.client.setHeight * 0.65 + this.WaterY, this.cloudSize * 1.2, '#FFFFFF');
+				this.visuals.circle(+i * 10, +Math.sin(i + i) * Math.sin(i + i / 2) * 15 + this.app.client.setHeight * 0.73 + this.WaterY, this.cloudSize * 1.5, '#DDDDDD');
+			}
+
+			//this.visuals.rect(this.app.client.setWidth/2, +this.app.client.setHeight*0.85,this.app.client.setWidth,140,"#FFFFFF");
+			//Ground
+			for (var i = this.cc; i >= 0; --i)
+				this.visuals.circle(i * 20, Math.sin(i + i) * Math.sin(i + i / 2) * 5 + this.app.client.setHeight, this.cloudSize, '#60676d', 1);
+
+
+			this.visuals.image_ext(this.flappyfishArray[1 - Math.round(Math.cos(this.viewX / 15) * 1)], this.app.client.setWidth * 0.85, this.FishY + 5 + Math.cos(this.viewX / 15) * 5 + this.app.client.setHeight * 0.25, 1, 1, 0);
+			//Water
+			this.visuals.rect_ext(0, +this.app.client.setHeight * 0.8 + this.WaterY, this.app.client.setWidth, 200 - this.WaterY, 1, 0.9, 0, "#1C6BA0");
+			for (var i = this.cc; i >= 0; --i)
+				this.visuals.circle(Math.cos(this.viewX / 50) * 6 - this.viewX + this.cx[i] + 25, -Math.sin((this.viewX + i) / 45) * Math.cos(i / 2) * 5 + this.app.client.setHeight * 0.8 + this.WaterY, this.cloudSize, '#000000', 0.7);
+
+			for (var i = this.cc; i >= 0; --i) {
+				this.visuals.circle(Math.sin(this.viewX / 100) * 6 - this.viewX + this.cx[i] - 25, Math.sin((this.viewX + i) / 100) * Math.sin(i / 2) * 5 + this.app.client.setHeight * 0.8 + this.WaterY, this.cloudSize, '#1C6FA0', 0.7);
+				this.visuals.circle(Math.cos(this.viewX / 100) * 6 - this.viewX + this.cx[i] + 25, -Math.sin((this.viewX + i) / 90) * Math.cos(i / 2) * 5 + this.app.client.setHeight * 0.8 + this.WaterY, this.cloudSize, '#1C6FAF', 0.7);
+				this.visuals.circle(Math.cos(this.viewX / 50) * 6 - this.viewX + this.cx[i] + 25, -Math.sin((this.viewX + i) / 45) * Math.cos(i / 2) * 5 + this.app.client.setHeight * 0.8 + this.WaterY, this.cloudSize, '#1F6FA0', 0.7);
+
+
+				if (i == 0)
+					this.visuals.image_ext(this.flappyfishArray[7], Math.cos(this.viewX / 50) * 6 - this.viewX + this.cx[i] + 25, -Math.sin((this.viewX + i) / 45) * Math.cos(i / 2) * 25 + 50 + this.WaterY, 0.2, 1, 0);
+
+
+			}
+			if (this.splash) {
+				this.visuals.circle(Math.sin(this.SplashY / 10) * 5 + this.app.client.setWidth * 0.85, this.SplashY + this.app.client.setHeight * 0.55, 5 - this.SplashY / 30, '#FFFFFF', 0.7);
+				this.visuals.circle(Math.sin(this.SplashY / 10) * 15 + this.app.client.setWidth * 0.85, this.SplashY + this.app.client.setHeight * 0.55, 5 - this.SplashY / 30, '#FFFFFF', 0.7);
+
+			}
+
+			this.visuals.image_ext(this.title, this.app.client.setWidth * 0.05, Math.cos(this.viewX / 15) * 5 + this.app.client.setHeight * 0.25, 0.9, 1, 0);
+
+
+			if (this.buttonfade > 0) {
+
+				if (this.continue)
+					if (this.buttonfade - App.delta * 0.1 > 0)
+						this.buttonfade -= App.delta * 0.1;
+					else {
+						App.client.update.state.set(Game, true);
+					}
+				this.visuals.image_button(this.flappyfishArray[4], this.app.client.setWidth * 0.3, this.app.client.setHeight * 0.73, 1, function () { App.client.update.state.current.continue = true; App.client.update.state.current.start = true; }, this.flappyfishArray[4], 1, 1, this.buttonfade, 1);
+				this.visuals.image_button(this.flappyfishArray[3], this.app.client.setWidth * 0.7, this.app.client.setHeight * 0.73, 1, function () { App.client.update.state.current.score = true; }, this.flappyfishArray[3], 1, 1, this.buttonfade, 1);
+				this.visuals.image_button(this.flappyfishArray[5], this.app.client.setWidth * 0.7, this.app.client.setHeight * 0.65, 1, function () {
+					FB.ui(
+						{
+							method: 'feed',
+							name: 'Flappy Fish Number 1 Yes!',
+							caption: 'Flappy Fish: The Experience, ringing your inner fish to the max with the desktop and mobile web',
+							description: (
+								'A small fish library that allows you to harness ' +
+								'the power of flight, bringing the user\'s identity, ' +
+								'social jumping and distribution power to your side.'
+							),
+							link: 'https://apps.facebook.com/flappyfishthex/',
+							picture: 'https://ryanspice.com/flappyfish/images/FlappyFish0.png'
+						},
+						function (response) {
+							if (response && response.post_id) {
+							} else {
+							}
+						}
+					);
+				}, this.flappyfishArray[5], 1, 1, this.buttonfade, 1);
+
+				this.visuals.image_ext(this.flappyfishArray[6], this.app.client.setWidth * 0.5, this.app.client.setHeight * 0.8, 1, this.buttonfade, 1);
+			}
+
+			if (this.score) {
+				this.visuals.image_ext(this.box, this.app.client.setWidth * 0.5, this.app.client.setHeight * 0.5, 0.5, 1, 1);
+
+				this.visuals.text_ext("Top Scores", this.app.client.setWidth / 3.2, this.app.client.setHeight * 0.45, "#000000", 1.5)
+				var s = App.scores[0];
+				this.visuals.text_ext("1." + s.name, this.app.client.setWidth / 3.4, this.app.client.setHeight * 0.49, "#000000", 1.5)
+				this.visuals.text_ext(s.score, this.app.client.setWidth / 1.5, this.app.client.setHeight * 0.49, "#000000", 1.5)
+				var s = App.scores[1];
+				this.visuals.text_ext("2." + s.name, this.app.client.setWidth / 3.4, this.app.client.setHeight * 0.52, "#000000", 1.5)
+				this.visuals.text_ext(s.score, this.app.client.setWidth / 1.5, this.app.client.setHeight * 0.52, "#000000", 1.5)
+				var s = App.scores[2];
+				this.visuals.text_ext("3." + s.name, this.app.client.setWidth / 3.4, this.app.client.setHeight * 0.56, "#000000", 1.5)
+				this.visuals.text_ext(s.score, this.app.client.setWidth / 1.5, this.app.client.setHeight * 0.56, "#000000", 1.5)
+			}
+			this.visuals.rect_gradient(this.app.client.setWidth * 0.5, this.app.client.setHeight * 0.5, this.app.client.setWidth, this.app.client.setHeight,
+				1, 1 - Math.sin(this.buttonfade * 2), 1, "#111111", "#000000", 0);
+			return true;
+		}
+	};
+	App.init("Flappy Fish: 2021", 320, 480);
+</script>
+Loading...
+</html>
