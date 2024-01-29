@@ -1,22 +1,28 @@
+<?php
 
-var s = [
-<?php 
-$server = mysql_connect("localhost","rspice","yahoo123") or die("ERROR - Could not connect to mySQL Server"); 
-mysql_select_db("rspice_snow") or die("ERROR - Could not select database");
-$result = mysql_query("SELECT * FROM  `flappy` ORDER BY  `score` DESC LIMIT 0 , 3");
-		$count = mysql_num_rows($result);
-		if ($count)
-			{
-			$i = 0;
-				while($row = mysql_fetch_array($result))
-					{
-					echo "{id:	".$row['id'].",";
-					echo "name:'".$row['name']."',";
-					echo "score:".$row['score']."},";
-					$i++;
-					}
-			}
-mysql_close($server);
+
+$decodedUsername = base64_decode($encodedUsername);
+$decodedPassword = base64_decode($encodedPassword);
+$decodedDbName = base64_decode($encodedDbName);
+
+function getTopScores() {
+    $dsn = 'mysql:host=localhost;dbname='.$decodedDbName.';charset=utf8';
+    $user = $decodedUsername;
+    $password = $decodedPassword;
+
+    try {
+        $pdo = new PDO($dsn, $user, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $stmt = $pdo->query("SELECT * FROM `flappy` ORDER BY `score` DESC LIMIT 3");
+        $scores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $scores;
+    } catch (PDOException $e) {
+        die("ERROR: Could not connect. " . $e->getMessage());
+    }
+}
+
+$scores = getTopScores();
+echo "App.scores = " . json_encode($scores) . ";";
 ?>
-];
-App.scores = s;
